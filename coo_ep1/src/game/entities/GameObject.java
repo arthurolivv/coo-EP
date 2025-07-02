@@ -5,8 +5,8 @@ import game.util.Status;
 
 import java.awt.Color;
 
-public abstract class GameObject
-{
+public abstract class GameObject {
+
     protected Color color;
     protected Vector2D position;
     protected Vector2D velocity;
@@ -15,92 +15,87 @@ public abstract class GameObject
     protected double explosionStart;
     protected double explosionEnd;
 
-    public GameObject(Color color, Vector2D position, Vector2D velocity, double radius)
-    {
-        this.color = color;
+    // --- Construtor ---
+    public GameObject(
+            Color color,
+            Vector2D position,
+            Vector2D velocity,
+            double radius
+    ) {
+        this.color    = color;
         this.position = position;
         this.velocity = velocity;
-        this.radius = radius;
-        this.status = Status.ACTIVE;
+        this.radius   = radius;
+        this.status   = Status.ACTIVE;
     }
 
-    public Color  getColor() {
+    // --- Getters e Setters ---
+    public Color getColor() {
         return color;
     }
+
     public void setColor(Color color) {
         this.color = color;
     }
 
-    public Vector2D getPosition()
-    {
+    public Vector2D getPosition() {
         return position;
     }
 
-    public Vector2D getVelocity()
-    {
-        return velocity;
-    }
-
-    public void setPosition(Vector2D position)
-    {
+    public void setPosition(Vector2D position) {
         this.position = position;
     }
 
-    public void setVelocity(Vector2D velocity)
-    {
+    public Vector2D getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D velocity) {
         this.velocity = velocity;
     }
 
-    public double getRadius()
-    {
+    public double getRadius() {
         return radius;
     }
 
-    public void setRadius(double radius)
-    {
+    public void setRadius(double radius) {
         this.radius = radius;
     }
 
-    public Status getStatus()
-    {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status)
-    {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public double getExplosionStart()
-    {
+    public double getExplosionStart() {
         return explosionStart;
     }
 
-    public double getExplosionEnd()
-    {
-        return explosionEnd;
-    }
-
-    public void setExplosionStart(double explosionStart)
-    {
+    public void setExplosionStart(double explosionStart) {
         this.explosionStart = explosionStart;
     }
 
-    public void setExplosionEnd(double explosionEnd)
-    {
+    public double getExplosionEnd() {
+        return explosionEnd;
+    }
+
+    public void setExplosionEnd(double explosionEnd) {
         this.explosionEnd = explosionEnd;
     }
 
-    public boolean isExploding(double currentTime)
-    {
+    // --- Utilitários ---
+    public boolean isExploding(double currentTime) {
         return status == Status.EXPLODING && currentTime < explosionEnd;
     }
 
-    public boolean isActive()
-    {
+    public boolean isActive() {
         return status == Status.ACTIVE;
     }
 
+    // --- Métodos abstratos ---
     public abstract void update(long delta);
     public abstract void render(long currentTime);
 }

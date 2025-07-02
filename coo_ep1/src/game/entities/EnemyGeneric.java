@@ -15,6 +15,7 @@ public abstract class EnemyGeneric extends GameObject {
   private long fireCooldown;
   private long nextShotTime;
 
+  // --- Construtor ---
   public EnemyGeneric(
           Color color,
           Vector2D position,
@@ -28,7 +29,13 @@ public abstract class EnemyGeneric extends GameObject {
           double explosionEnd,
           double dydx
   ) {
-    super(color, position, velocity, radius);
+    super(
+            color,
+            position,
+            velocity,
+            radius
+    );
+
     this.health = health;
     this.damage = damage;
     this.angle = angle;
@@ -40,7 +47,7 @@ public abstract class EnemyGeneric extends GameObject {
     this.nextShotTime = 0;
   }
 
-  // Getters e Setters
+  // --- Getters e Setters ---
   public double getDydx() {
     return dydx;
   }
@@ -89,10 +96,11 @@ public abstract class EnemyGeneric extends GameObject {
     this.nextShotTime = nextShotTime;
   }
 
+  // --- Lógica de disparo do inimigo ---
   public Optional<ProjectileEnemy> tryToShoot(long currentTime, double playerY) {
     if (currentTime > getNextShotTime() && getPosition().getY() < playerY) {
       double vx = Math.cos(getAngle()) * 0.45;
-      double vy = Math.sin(getAngle()) * 0.45 * (-1.0);
+      double vy = Math.sin(getAngle()) * -0.45;
       Vector2D velocity = new Vector2D(vx, vy);
 
       ProjectileEnemy projectile = new ProjectileEnemy(
@@ -103,13 +111,14 @@ public abstract class EnemyGeneric extends GameObject {
               getDamage()
       );
 
-      setNextShotTime(currentTime + (long) (200 + Math.random() * 500));
+      setNextShotTime(currentTime + (long)(200 + Math.random() * 500));
       return Optional.of(projectile);
     }
 
     return Optional.empty();
   }
 
+  // --- Métodos abstratos obrigatórios ---
   @Override
   public abstract void update(long delta);
 

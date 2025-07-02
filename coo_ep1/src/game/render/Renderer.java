@@ -11,12 +11,14 @@ import java.util.List;
 
 public class Renderer {
 
+    // --- Atributos ---
     private final Player player;
     private final List<EnemyGeneric> enemies;
     private final List<ProjectileGeneric> projectilesPlayer;
     private final List<ProjectileGeneric> projectilesEnemy;
     private final StarField starField;
 
+    // --- Construtor ---
     public Renderer(
             Player player,
             List<EnemyGeneric> enemies,
@@ -24,18 +26,21 @@ public class Renderer {
             List<ProjectileGeneric> projectilesEnemy,
             StarField starField
     ) {
-        this.player = player;
-        this.enemies = enemies;
+        this.player            = player;
+        this.enemies           = enemies;
         this.projectilesPlayer = projectilesPlayer;
-        this.projectilesEnemy = projectilesEnemy;
-        this.starField = starField;
+        this.projectilesEnemy  = projectilesEnemy;
+        this.starField         = starField;
     }
 
+    // --- Renderização de todos os elementos ---
     public void renderAll(long currentTime) {
         starField.render();
 
         // Player
-        if (player != null) player.render(currentTime);
+        if (player != null) {
+            player.render(currentTime);
+        }
 
         // Inimigos
         for (EnemyGeneric enemy : enemies) {
