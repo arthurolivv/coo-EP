@@ -7,6 +7,8 @@ import java.awt.Color;
 public abstract class ProjectileGeneric extends GameObject {
 
     protected int damage;
+    protected Vector2D velocity;
+
 
     // --- Construtor ---
     public ProjectileGeneric(
@@ -19,11 +21,18 @@ public abstract class ProjectileGeneric extends GameObject {
         super(
                 color,
                 position,
-                velocity,
                 radius
         );
-
+        this.velocity = velocity;
         this.damage = damage;
+    }
+
+    public Vector2D getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D velocity) {
+        this.velocity = velocity;
     }
 
     // --- Getters e Setters ---

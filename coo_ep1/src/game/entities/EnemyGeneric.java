@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public abstract class EnemyGeneric extends GameObject {
 
-  private double dydx;
+  private double rotationVelocity;
+  private double velocity;
   private int health;
   private int damage;
   private double angle;
@@ -19,7 +20,7 @@ public abstract class EnemyGeneric extends GameObject {
   public EnemyGeneric(
           Color color,
           Vector2D position,
-          Vector2D velocity,
+          double velocity,
           double radius,
           double angle,
           int health,
@@ -27,12 +28,11 @@ public abstract class EnemyGeneric extends GameObject {
           long fireCooldown,
           double explosionStart,
           double explosionEnd,
-          double dydx
+          double rotationVelocity
   ) {
     super(
             color,
             position,
-            velocity,
             radius
     );
 
@@ -40,20 +40,29 @@ public abstract class EnemyGeneric extends GameObject {
     this.damage = damage;
     this.angle = angle;
     this.fireCooldown = fireCooldown;
-    this.dydx = dydx;
+    this.rotationVelocity = rotationVelocity;
     this.setExplosionStart(explosionStart);
     this.setExplosionEnd(explosionEnd);
     this.setStatus(Status.ACTIVE);
     this.nextShotTime = 0;
+    this.velocity = velocity;
   }
 
   // --- Getters e Setters ---
-  public double getDydx() {
-    return dydx;
+  public double getRotationVelocity() {
+    return rotationVelocity;
   }
 
-  public void setDydx(double dydx) {
-    this.dydx = dydx;
+  public double getVelocity() {
+    return velocity;
+  }
+
+  public void setVelocity(double velocity) {
+    this.velocity = velocity;
+  }
+
+  public void setRotationVelocity(double rotationVelocity) {
+    this.rotationVelocity = rotationVelocity;
   }
 
   public int getHealth() {
@@ -97,26 +106,7 @@ public abstract class EnemyGeneric extends GameObject {
   }
 
   // --- Lógica de disparo do inimigo ---
-  public Optional<ProjectileEnemy> tryToShoot(long currentTime, double playerY) {
-    if (currentTime > getNextShotTime() && getPosition().getY() < playerY) {
-      double vx = Math.cos(getAngle()) * 0.45;
-      double vy = Math.sin(getAngle()) * -0.45;
-      Vector2D velocity = new Vector2D(vx, vy);
-
-      ProjectileEnemy projectile = new ProjectileEnemy(
-              Color.RED,
-              new Vector2D(getPosition().getX(), getPosition().getY()),
-              velocity,
-              2.0,
-              getDamage()
-      );
-
-      setNextShotTime(currentTime + (long)(200 + Math.random() * 500));
-      return Optional.of(projectile);
-    }
-
-    return Optional.empty();
-  }
+  public abstract Optional<ProjectileEnemy> tryToShoot(long currentTime, double playerY);
 
   // --- Métodos abstratos obrigatórios ---
   @Override

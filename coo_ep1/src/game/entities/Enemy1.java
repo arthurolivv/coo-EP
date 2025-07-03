@@ -5,6 +5,7 @@ import game.util.Vector2D;
 import game.util.Status;
 
 import java.awt.Color;
+import java.util.Optional;
 
 public class Enemy1 extends EnemyGeneric {
 
@@ -32,7 +33,7 @@ public class Enemy1 extends EnemyGeneric {
     public Enemy1(
             Color color,
             Vector2D position,
-            Vector2D velocity,
+            double velocity,
             double radius,
             double angle,
             int health,
@@ -40,7 +41,7 @@ public class Enemy1 extends EnemyGeneric {
             long fireCooldown,
             double explosionStart,
             double explosionEnd,
-            double dydx
+            double velocityRotation
     ) {
         super(
                 color,
@@ -53,25 +54,50 @@ public class Enemy1 extends EnemyGeneric {
                 fireCooldown,
                 explosionStart,
                 explosionEnd,
-                dydx
+                velocityRotation
         );
+    }
+
+    @Override
+    public Optional<ProjectileEnemy> tryToShoot(long currentTime, double playerY) {
+        if (currentTime > getNextShotTime() && getPosition().getY() < playerY) {
+            double vx = Math.cos(getAngle()) * 0.45;
+            double vy = Math.sin(getAngle()) * -0.45;
+            Vector2D velocity = new Vector2D(vx, vy);
+
+            ProjectileEnemy projectile = new ProjectileEnemy(
+                    Color.RED,
+                    new Vector2D(getPosition().getX(), getPosition().getY()),
+                    velocity,
+                    2.0,
+                    getDamage()
+            );
+
+            setNextShotTime(currentTime + (long)(200 + Math.random() * 500));
+            return Optional.of(projectile);
+        }
+
+        return Optional.empty();
     }
 
     // --- Atualização do inimigo ---
     @Override
     public void update(long delta) {
-        double dx = getVelocity().getX();
-        double dy = getVelocity().getY();
-        double newX = getPosition().getX() + dx * delta + dy * getDydx() * delta;
-        double newY = getPosition().getY() + dy * delta;
+
+        double newX = getPosition().getX() + getVelocity() * Math.cos(getAngle()) * delta;
+        double newY = getPosition().getY() + getVelocity() * Math.sin(getAngle()) * delta * (-1.0);
 
         getPosition().setX(newX);
         getPosition().setY(newY);
 
-        if (newY > GameLib.HEIGHT) {
+        setAngle(getAngle() + getRotationVelocity() * delta);
+
+        // Verifica se o inimigo saiu da tela
+        if (newY > GameLib.HEIGHT + 10) {
             setStatus(Status.INACTIVE);
         }
     }
+
 
     // --- Renderização do inimigo ---
     @Override

@@ -12,6 +12,7 @@ public class Player extends GameObject {
     private int damage;
     private long fireCooldown;
     private long nextFireCooldown = 0;
+    protected Vector2D velocity;
 
     // --- Construtor ---
     public Player(
@@ -27,7 +28,6 @@ public class Player extends GameObject {
         super(
                 color,
                 position,
-                velocity,
                 radius
         );
 
@@ -36,6 +36,7 @@ public class Player extends GameObject {
         this.explosionStart = explosionStart;
         this.status         = Status.ACTIVE;
         this.fireCooldown   = fireCooldown;
+        this.velocity = velocity;
     }
 
     // --- Getters e Setters ---
@@ -69,6 +70,14 @@ public class Player extends GameObject {
 
     public void setNextFireCooldown(long nextFireCooldown) {
         this.nextFireCooldown = nextFireCooldown;
+    }
+
+    public Vector2D getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D velocity) {
+        this.velocity = velocity;
     }
 
     // --- Explosão ---

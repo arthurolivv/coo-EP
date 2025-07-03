@@ -95,14 +95,19 @@ public class GameEngine {
         for (EnemyGeneric enemy : enemies) {
             enemy.update(delta);
 
-            if (enemy instanceof Enemy1 && enemy.isActive()) {
+            if (enemy.isActive()) {
                 enemy.tryToShoot(currentTime, player.getPosition().getY())
                         .ifPresent(projectile -> {
-                            projectile.setVelocity(new Vector2D(0.0, 0.45));
+                            if (enemy instanceof Enemy1) {
+                                projectile.setVelocity(new Vector2D(0.0, 0.45));
+                            }
+                            // Enemy2 já deve ter sua velocidade configurada no tryToShoot
                             projectilesEnemy.add(projectile);
                         });
             }
         }
+
+
 
         for (ProjectileGeneric p : projectilesPlayer) p.update(delta);
         for (ProjectileGeneric p : projectilesEnemy) p.update(delta);
@@ -180,16 +185,19 @@ public class GameEngine {
         projectilesPlayer.removeAll(toRemove);
     }
 
+    int enemy2_count = 0;
+
     private void spawnEnemies(long currentTime) {
+
         if (currentTime >= Enemy1.getNextSpawnTime()) {
             Enemy1.setNextSpawnTime(currentTime + Enemy1.getSpawnCooldown());
 
             Enemy1 newEnemy1 = new Enemy1(
                     Color.CYAN,
                     new Vector2D(Math.random() * (GameLib.WIDTH - 20.0) + 10.0, -10.0),
-                    new Vector2D(0.0, 0.20 + Math.random() * 0.15),
+                    0.20 + Math.random() * 0.15,
                     9.0,
-                    0.0,
+                    (3 * Math.PI) / 2,
                     1,
                     5,
                     500,
@@ -207,18 +215,30 @@ public class GameEngine {
             Enemy2 newEnemy2 = new Enemy2(
                     Color.MAGENTA,
                     new Vector2D(Math.random() * (GameLib.WIDTH - 20.0) + 10.0, -10.0),
-                    new Vector2D(0.0, 0.25 + Math.random() * 0.20),
-                    10.0,
-                    0.0,
+                    0.42,
+                    12.0,
+                    (3 * Math.PI) / 2,
                     1,
                     8,
                     1000,
                     0,
                     currentTime + 500,
-                    0.05
+                    0.0
             );
 
+            enemy2_count++;
+
+            if(enemy2_count<10){
+                newEnemy2.setNextSpawnTime(currentTime + 120);
+            }
+            else{
+                enemy2_count = 0;
+                newEnemy2.setVelocity(Math.random() > 0.5 ? GameLib.WIDTH * 0.2 : GameLib.WIDTH * 0.8);
+                newEnemy2.setNextSpawnTime((long) (currentTime + 3000 + Math.random() * 3000));
+            }
+
             enemies.add(newEnemy2);
+
         }
     }
 

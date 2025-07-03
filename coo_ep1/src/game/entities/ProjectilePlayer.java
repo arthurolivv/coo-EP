@@ -37,7 +37,9 @@ public class ProjectilePlayer extends ProjectileGeneric {
     public void render(long currentTime) {
         if (getStatus() == Status.ACTIVE) {
             GameLib.setColor(getColor());
-            GameLib.drawCircle(getPosition().getX(), getPosition().getY(), getRadius());
+            GameLib.drawLine(getPosition().getX(), getPosition().getY() - 5, getPosition().getX(), getPosition().getY() + 5);
+            GameLib.drawLine(getPosition().getX() - 1, getPosition().getY() - 3, getPosition().getX() - 1, getPosition().getY() + 3);
+            GameLib.drawLine(getPosition().getX() + 1, getPosition().getY() - 3, getPosition().getX() + 1, getPosition().getY() + 3);
         }
     }
 }

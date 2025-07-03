@@ -9,7 +9,6 @@ public abstract class GameObject {
 
     protected Color color;
     protected Vector2D position;
-    protected Vector2D velocity;
     protected double radius;
     protected Status status;
     protected double explosionStart;
@@ -19,12 +18,10 @@ public abstract class GameObject {
     public GameObject(
             Color color,
             Vector2D position,
-            Vector2D velocity,
             double radius
     ) {
         this.color    = color;
         this.position = position;
-        this.velocity = velocity;
         this.radius   = radius;
         this.status   = Status.ACTIVE;
     }
@@ -44,14 +41,6 @@ public abstract class GameObject {
 
     public void setPosition(Vector2D position) {
         this.position = position;
-    }
-
-    public Vector2D getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Vector2D velocity) {
-        this.velocity = velocity;
     }
 
     public double getRadius() {
