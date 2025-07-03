@@ -85,7 +85,6 @@ public class Enemy2 extends EnemyGeneric {
   @Override
   public void update(long delta) {
 
-
     double newX = getPosition().getX() + getVelocity() * Math.cos(getAngle()) * delta;
     double newY = getPosition().getY() + getVelocity() * Math.sin(getAngle()) * delta * (-1.0);
 
@@ -94,14 +93,53 @@ public class Enemy2 extends EnemyGeneric {
 
     setAngle(getAngle() + getRotationVelocity() * delta);
 
+    boolean shootNow = false;
     double threshold = GameLib.HEIGHT * 0.30;
     double previousY = getPosition().getY();
 
     if(previousY < threshold && getPosition().getY() >= threshold) {
 
-      if(getPosition().getY() < GameLib.WIDTH / 2) getPosition().setY(0.003);
-      else getPosition().setY(-0.003);
+      if(getPosition().getX() < GameLib.WIDTH / 2) setRotationVelocity(0.003);
+      else setRotationVelocity(-0.003);
     }
+
+    if(getRotationVelocity() > 0 && Math.abs(getAngle() - 3 * Math.PI) < 0.05){
+
+      setRotationVelocity(0);
+      setAngle(3 * Math.PI);
+      shootNow = true;
+    }
+
+    if(getRotationVelocity() < 0 && Math.abs(getAngle()) < 0.05){
+
+      setRotationVelocity(0);
+      setAngle(0);
+      shootNow = true;
+    }
+
+//    if(shootNow){
+//
+//      double [] angles = { Math.PI/2 + Math.PI/8, Math.PI/2, Math.PI/2 - Math.PI/8 };
+//      int [] freeArray = findFreeIndex(e_projectile_states, angles.length);
+//
+//      for(int k = 0; k < freeArray.length; k++){
+//
+//        int free = freeArray[k];
+//
+//        if(free < e_projectile_states.length){
+//
+//          double a = angles[k] + Math.random() * Math.PI/6 - Math.PI/12;
+//          double vx = Math.cos(a);
+//          double vy = Math.sin(a);
+//
+//          e_projectile_X[free] = enemy2_X[i];
+//          e_projectile_Y[free] = enemy2_Y[i];
+//          e_projectile_VX[free] = vx * 0.30;
+//          e_projectile_VY[free] = vy * 0.30;
+//          e_projectile_states[free] = ACTIVE;
+//        }
+//      }
+//    }
 
     if (newY > GameLib.HEIGHT + 10) {
       setStatus(Status.INACTIVE);

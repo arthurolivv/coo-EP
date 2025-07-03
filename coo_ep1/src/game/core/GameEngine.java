@@ -212,9 +212,11 @@ public class GameEngine {
         if (currentTime >= Enemy2.getNextSpawnTime()) {
             Enemy2.setNextSpawnTime(currentTime + Enemy2.getSpawnCooldown());
 
+            double spawnX = GameLib.WIDTH * 0.20;
+
             Enemy2 newEnemy2 = new Enemy2(
                     Color.MAGENTA,
-                    new Vector2D(Math.random() * (GameLib.WIDTH - 20.0) + 10.0, -10.0),
+                    new Vector2D(spawnX, -10.0),
                     0.42,
                     12.0,
                     (3 * Math.PI) / 2,
